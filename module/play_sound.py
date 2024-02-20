@@ -23,7 +23,7 @@ class SoundPlayer(Generic):
     mixer.init()
     mixer.music.set_volume(1.0)
 
-    possible_keys = ["message", "file"]
+    possible_keys = ["stop", "message", "file"]
 
     # Constructor for play-sound model
     @classmethod
@@ -61,18 +61,21 @@ class SoundPlayer(Generic):
                 valid_key = True
 
         if (not valid_key):
-            print("no valid input, please use commands 'message' or 'file'")
+            self.LOGGER.warn("no valid input, please use commands 'message' or 'file'")
             return {"response": "invalid request, no valid command given"}
 
         # Play message
         if "message" in input.keys():
-            print("Playing message \'" + input["message"] + "\'")
-            await self.play_message(input["message"])
+            self.LOGGER.info("Playing message \'" + input["message"] + "\'")
+            await self.play_message(self, input["message"])
 
         # Play audio file
         if "file" in input.keys():
-            print("Playing " + input["file"])
-            await self.play_audio_file(input["file"])
+            self.LOGGER.info("Playing " + input["file"])
+            await self.play_audio_file(self, input["file"])
+
+        if "stop" in input.keys():
+            await self.stop(self)
 
         resp = {}
         return resp
@@ -80,8 +83,20 @@ class SoundPlayer(Generic):
     @classmethod
     async def get_geometries(self) -> List[Geometry]:
         return 
+    
+    @classmethod
+    async def close(self) -> None:
+        await self.stop(self)
+        return 
+    
+    async def stop(self):
+        mixer.music.stop()
+        mixer.music.unload()
+  
+    async def play_message(self, message):
+        # Stop and reset
+        await self.stop(self)
 
-    async def play_message(message):
         # Create audio buffer
         tts = gTTS(text=message, lang='en')
         mp3 = BytesIO()
@@ -91,21 +106,15 @@ class SoundPlayer(Generic):
         # Play message
         mixer.music.load(mp3)
         mixer.music.play()
-        while mixer.music.get_busy():
-            time.sleep(1)   
 
-        mixer.music.unload()
+    async def play_audio_file(self, filename):
+        # Stop and reset
+        await self.stop(self)
 
-    async def play_audio_file(filename):
         # Play file
         mixer.music.load(filename)
         mixer.music.play()
 
-        # Wait for audio to complete
-        while mixer.music.get_busy():
-            time.sleep(1)   
-
-        mixer.music.unload()
 
 async def main():
     my_sound_player = SoundPlayer(name="test")
