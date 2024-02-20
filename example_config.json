@@ -1,0 +1,12 @@
+{
+    "components": [
+      {
+        "name": "play-sound",
+        "type": "generic",
+        "model": "jeremyrhyde:generic:play-sound",
+        "attributes": {
+        },
+        "depends_on": []
+      }
+    ]
+  }
