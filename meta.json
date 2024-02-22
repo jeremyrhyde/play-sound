@@ -1,0 +1,13 @@
+{
+  "module_id": "jeremyrhyde:play-sound",
+  "visibility": "public",
+  "url": "https://github.com/jeremyrhyde/play-sound",
+  "description": "Plays sound bytes via audio jack",
+  "models": [
+    {
+      "api": "rdk:component:generic",
+      "model": "jeremyrhyde:generic:play-sound"
+    }
+  ],
+  "entrypoint": "exec.sh"
+}

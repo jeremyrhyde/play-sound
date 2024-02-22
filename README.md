@@ -1,6 +1,6 @@
 # play-sound
 
-This play-sound module can be found on Viam registry. It can be added to any robot as a generic component and will output the desired audio via the audio.
+This play-sound module can be found on Viam registry [here](https://app.viam.com/module/jeremyrhyde/play-sound). It can be added to any robot as a generic component and will output the desired audio via the audio.
 
 This module has only been tested on a Mac with an M1 chip and a Raspberry Pi 4.
 
